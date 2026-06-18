@@ -4,7 +4,7 @@
 # Backend za spletno aplikacijo "Pravi Avto".
 # Uporablja Flask framework in podatke iz cars.py
 # =============================================================================
-
+import os
 from flask import Flask, render_template, request, jsonify
 from cars import AVTOMOBILI, poisci_avtomobile, poisci_avto_po_slugu
 
@@ -114,4 +114,5 @@ if __name__ == "__main__":
     # Debug mode za razvoj - izklopi pri produkciji!
     print("🚗 Pravi Avto aplikacija se zaganja...")
     print("📍 Dostopno na: http://localhost:5000")
-    app.run(debug=True, host="0.0.0.0", port=5000)
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host="0.0.0.0", port=port)
