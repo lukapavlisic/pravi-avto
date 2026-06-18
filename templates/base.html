@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="sl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}Pravi Avto{% endblock %}</title>
+  <meta name="description" content="Najdi avto, ki ustreza tvojemu budgetu in željam.">
+
+  <!-- Glavna CSS datoteka -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+
+  <!-- Favicon (emoji kot placeholder) -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🚗</text></svg>">
+</head>
+<body>
+
+  <!-- ======== HEADER / NAV ======== -->
+  <header class="site-header">
+    <nav class="container site-nav">
+      <a href="/" class="nav-logo">PRAVI<span>AVTO</span></a>
+      <ul class="nav-links">
+        <li><a href="/">Iskanje</a></li>
+        <li><a href="/vsi-avtomobili">Vsi avtomobili</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <!-- ======== VSEBINA ======== -->
+  <main>
+    {% block content %}{% endblock %}
+  </main>
+
+  <!-- ======== FOOTER ======== -->
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <div class="footer-logo">PRAVI<span>AVTO</span></div>
+      <p class="footer-note">Zaključna naloga · Aplikacija za iskanje avtomobilov</p>
+    </div>
+  </footer>
+
+  <!-- Globalni JS -->
+  <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+  {% block scripts %}{% endblock %}
+
+</body>
+</html>

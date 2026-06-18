@@ -1,0 +1,281 @@
+{% extends "base.html" %}
+
+{% block title %}{{ avto.polno_ime }} — Pravi Avto{% endblock %}
+
+{% block content %}
+
+<div class="car-detail-page">
+  <div class="container">
+
+    <a href="javascript:history.back()" class="back-nav">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+        <path d="M19 12H5M12 5l-7 7 7 7"/>
+      </svg>
+      Nazaj
+    </a>
+
+    <!-- ================================================== -->
+    <!-- NAZIV IN CENA                                       -->
+    <!-- ================================================== -->
+    <div class="car-detail-header">
+      <div>
+        <div class="car-detail-brand">{{ avto.znamka }}</div>
+        <h1 class="car-detail-name">{{ avto.model }}</h1>
+      </div>
+      <div class="car-detail-price">
+        <span class="car-detail-price-amount">{{ "{:,.0f}".format(avto.cena).replace(",", ".") }} €</span>
+        <span class="car-detail-price-label">okvirna cena</span>
+      </div>
+    </div>
+
+    <!-- ================================================== -->
+    <!-- SLIKA(E)                                             -->
+    <!-- Za športne: dve sliki (original + nadgrajen)        -->
+    <!-- Za ostale: ena slika                                 -->
+    <!-- ================================================== -->
+    {% if avto.kategorija == 'sporten' %}
+    <div class="car-images-grid">
+
+      <div class="car-image-block">
+        <div class="image-label">Original</div>
+        <div class="car-detail-image-wrap">
+          <img
+            src="{{ url_for('static', filename='images/' + avto.slika) }}"
+            alt="{{ avto.polno_ime }} - original"
+            class="car-detail-image"
+            onerror="this.parentElement.innerHTML='<div class=\'car-detail-image-placeholder\'><svg viewBox=\'0 0 24 24\' fill=\'none\' stroke=\'currentColor\' stroke-width=\'1.5\' width=\'48\' height=\'48\'><path d=\'M5 17H3a2 2 0 0 1-2-2V9a2 2 0 0 1 2-2h3.5L9 4h6l2.5 3H21a2 2 0 0 1 2 2v6a2 2 0 0 1-2 2h-2\'/><circle cx=\'12\' cy=\'15\' r=\'3\'/></svg><span>{{ avto.slika }}</span></div>'"
+          >
+        </div>
+      </div>
+
+      <div class="car-image-block">
+        <div class="image-label">Nadgrajen</div>
+        <div class="car-detail-image-wrap">
+          {% if avto.slika_tuning %}
+          <img
+            src="{{ url_for('static', filename='images/' + avto.slika_tuning) }}"
+            alt="{{ avto.polno_ime }} - tuning"
+            class="car-detail-image"
+            onerror="this.parentElement.innerHTML='<div class=\'car-detail-image-placeholder\'><svg viewBox=\'0 0 24 24\' fill=\'none\' stroke=\'currentColor\' stroke-width=\'1.5\' width=\'48\' height=\'48\'><path d=\'M5 17H3a2 2 0 0 1-2-2V9a2 2 0 0 1 2-2h3.5L9 4h6l2.5 3H21a2 2 0 0 1 2 2v6a2 2 0 0 1-2 2h-2\'/><circle cx=\'12\' cy=\'15\' r=\'3\'/></svg><span>{{ avto.slika_tuning }}</span></div>'"
+          >
+          {% else %}
+          <div class="car-detail-image-placeholder">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="48" height="48">
+              <path d="M5 17H3a2 2 0 0 1-2-2V9a2 2 0 0 1 2-2h3.5L9 4h6l2.5 3H21a2 2 0 0 1 2 2v6a2 2 0 0 1-2 2h-2"/>
+              <circle cx="12" cy="15" r="3"/>
+            </svg>
+            <span>Slika kmalu</span>
+          </div>
+          {% endif %}
+        </div>
+      </div>
+
+    </div>
+    <!-- /car-images-grid -->
+    {% else %}
+    <div class="car-images-grid car-images-single">
+      <div class="car-image-block">
+        <div class="car-detail-image-wrap">
+          <img
+            src="{{ url_for('static', filename='images/' + avto.slika) }}"
+            alt="{{ avto.polno_ime }}"
+            class="car-detail-image"
+            onerror="this.parentElement.innerHTML='<div class='car-detail-image-placeholder'><svg viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='1.5' width='48' height='48'><path d='M5 17H3a2 2 0 0 1-2-2V9a2 2 0 0 1 2-2h3.5L9 4h6l2.5 3H21a2 2 0 0 1 2 2v6a2 2 0 0 1-2 2h-2'/><circle cx='12' cy='15' r='3'/></svg><span>{{ avto.slika }}</span></div>'"
+          >
+        </div>
+      </div>
+    </div>
+    {% endif %}
+
+    <!-- ================================================== -->
+    <!-- SPECIFIKACIJE                                        -->
+    <!-- ================================================== -->
+    <div class="specs-section">
+      <p class="car-detail-desc">{{ avto.opis }}</p>
+
+      <div class="specs-grid">
+        <div class="spec-item">
+          <div class="spec-label">Motor</div>
+          <div class="spec-value">{{ avto.motor }}</div>
+        </div>
+        <div class="spec-item">
+          <div class="spec-label">Moc</div>
+          <div class="spec-value">{{ avto.moc }} KM</div>
+        </div>
+        <div class="spec-item">
+          <div class="spec-label">Gorivo</div>
+          <div class="spec-value">{% if avto.gorivo == 'bencin' %}Bencin{% else %}Diesel{% endif %}</div>
+        </div>
+        <div class="spec-item">
+          <div class="spec-label">Letnik</div>
+          <div class="spec-value">{{ avto.letnik }}</div>
+        </div>
+        <div class="spec-item">
+          <div class="spec-label">Poraba</div>
+          <div class="spec-value">{{ avto.poraba }}</div>
+        </div>
+        <div class="spec-item">
+          <div class="spec-label">Kategorija</div>
+          <div class="spec-value">
+            {% if avto.kategorija == 'sporten' %}Športen
+            {% elif avto.kategorija == 'navaden' %}Navaden
+            {% elif avto.kategorija == 'druzinski' %}Družinski
+            {% else %}{{ avto.kategorija }}{% endif %}
+          </div>
+        </div>
+        {% if avto.cas_0_100 %}
+        <div class="spec-item spec-highlight">
+          <div class="spec-label">0–100 km/h</div>
+          <div class="spec-value">{{ avto.cas_0_100 }} s</div>
+        </div>
+        {% endif %}
+        {% if avto.masa %}
+        <div class="spec-item">
+          <div class="spec-label">Masa</div>
+          <div class="spec-value">{{ avto.masa }} kg</div>
+        </div>
+        {% endif %}
+        {% if avto.prtljaznik %}
+        <div class="spec-item">
+          <div class="spec-label">Prtljažnik</div>
+          <div class="spec-value">{{ avto.prtljaznik }} L</div>
+        </div>
+        {% endif %}
+      </div>
+    </div>
+
+    <hr class="divider">
+
+    <!-- ================================================== -->
+    <!-- TUNING SEKCIJA                                      -->
+    <!-- ================================================== -->
+    {% if avto.tuning and avto.kategorija == "sporten" %}
+    <div class="tuning-section">
+
+      <h2 class="section-title">Tuning potencial</h2>
+
+      <!-- Stage 1 konface -->
+      <div class="tuning-stage-card">
+
+        <div class="tuning-stage-header">
+          <div class="tuning-stage-badge">Stage 1</div>
+          <div class="tuning-moc-compare">
+            <div class="moc-item">
+              <div class="moc-label">Original</div>
+              <div class="moc-value">{{ avto.moc }} KM</div>
+            </div>
+            <div class="moc-arrow">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                <path d="M5 12h14M12 5l7 7-7 7"/>
+              </svg>
+            </div>
+            <div class="moc-item">
+              <div class="moc-label">Po Stage 1</div>
+              <div class="moc-value moc-tuned">{{ avto.tuning.stage1_moc }} KM</div>
+            </div>
+            <div class="moc-gain">
+              +{{ avto.tuning.stage1_moc - avto.moc }} KM
+            </div>
+          </div>
+        </div>
+
+        <p class="tuning-opis">{{ avto.tuning.stage1_opis }}</p>
+
+        <div class="tuning-cena-row">
+          <span class="tuning-cena-label">Okvirna cena remapa:</span>
+          <span class="tuning-cena-value">{{ avto.tuning.stage1_cena }}</span>
+        </div>
+
+      </div>
+
+      <!-- Zvocni predvajalniki -->
+      <div class="sound-section">
+        <h3 class="sound-title">Primerjava zvoka</h3>
+        <p class="sound-opis">{{ avto.tuning.zvok_opis }}</p>
+
+        <div class="sound-players">
+
+          <div class="sound-player-card">
+            <div class="sound-player-label">Original zvok</div>
+            <audio controls class="audio-player">
+              <source src="{{ url_for('static', filename='sounds/' + avto.tuning.zvok_stock) }}" type="audio/mpeg">
+              Brskalnik ne podpira predvajalnika.
+            </audio>
+            <p class="sound-file-note">{{ avto.tuning.zvok_stock }}</p>
+          </div>
+
+          <div class="sound-player-card">
+            <div class="sound-player-label">Zvok po nadgradnji</div>
+            <audio controls class="audio-player">
+              <source src="{{ url_for('static', filename='sounds/' + avto.tuning.zvok_tuning) }}" type="audio/mpeg">
+              Brskalnik ne podpira predvajalnika.
+            </audio>
+            <p class="sound-file-note">{{ avto.tuning.zvok_tuning }}</p>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+
+    <hr class="divider">
+    {% endif %}
+
+    <!-- ================================================== -->
+    <!-- PREDNOSTI IN SLABOSTI                               -->
+    <!-- ================================================== -->
+    <h2 class="section-title">Prednosti in slabosti</h2>
+
+    <div class="pros-cons">
+
+      <div class="pros-cons-card pros-card">
+        <div class="pros-cons-title pros">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="14" height="14">
+            <path d="M20 6L9 17l-5-5"/>
+          </svg>
+          Prednosti
+        </div>
+        <ul class="pros-cons-list pros">
+          {% for pred in avto.prednosti %}
+          <li>{{ pred }}</li>
+          {% endfor %}
+        </ul>
+      </div>
+
+      <div class="pros-cons-card cons-card">
+        <div class="pros-cons-title cons">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="14" height="14">
+            <path d="M18 6L6 18M6 6l12 12"/>
+          </svg>
+          Slabosti
+        </div>
+        <ul class="pros-cons-list cons">
+          {% for sla in avto.slabosti %}
+          <li>{{ sla }}</li>
+          {% endfor %}
+        </ul>
+      </div>
+
+    </div>
+
+    <!-- ================================================== -->
+    <!-- ZAKAJ IZBRATI                                       -->
+    <!-- ================================================== -->
+    <div class="why-section">
+      <div class="why-title">Zakaj izbrati ta avto</div>
+      <p class="why-text">{{ avto.zakaj }}</p>
+    </div>
+
+    <div style="margin-top: 44px; text-align: center;">
+      <a href="/" class="btn-details" style="max-width: 240px; margin: 0 auto;">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="14" height="14">
+          <path d="M19 12H5M12 5l-7 7 7 7"/>
+        </svg>
+        Nazaj na iskanje
+      </a>
+    </div>
+
+  </div>
+</div>
+
+{% endblock %}

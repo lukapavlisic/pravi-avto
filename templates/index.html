@@ -1,0 +1,138 @@
+{% extends "base.html" %}
+
+{% block title %}Pravi Avto — Najdi avto za tvoj budget{% endblock %}
+
+{% block content %}
+
+<section class="hero">
+  <div class="container">
+
+    <div class="hero-eyebrow">Tvoj vodnik do pravega avta</div>
+
+    <h1 class="hero-title">
+      PRAVI<br><span class="accent">AVTO</span>
+    </h1>
+
+    <p class="hero-subtitle">
+      Najdi avto, ki ustreza tvojemu budgetu in željam
+    </p>
+
+    <div class="search-card">
+      <p class="search-card-title">Nastavi iskanje</p>
+
+      <form id="search-form" novalidate>
+        <div class="form-grid">
+
+          <!-- BUDGET -->
+          <div class="form-group">
+            <label class="form-label" for="budget">
+              Maksimalen budget
+              <span class="form-label-note">(neobvezno)</span>
+            </label>
+            <div class="budget-input-wrap">
+              <span class="currency">€</span>
+              <input
+                type="number"
+                id="budget"
+                name="budget"
+                placeholder="npr. 15000"
+                min="500"
+                max="1000000"
+                step="500"
+              >
+            </div>
+          </div>
+
+          <!-- TIP -->
+          <div class="form-group">
+            <span class="form-label">Tip avtomobila</span>
+            <div class="segmented cols-4">
+              <div class="seg-option">
+                <input type="radio" name="tip" id="tip-sporten" value="sporten">
+                <label class="seg-label" for="tip-sporten">Športen</label>
+              </div>
+              <div class="seg-option">
+                <input type="radio" name="tip" id="tip-navaden" value="navaden">
+                <label class="seg-label" for="tip-navaden">Navaden</label>
+              </div>
+              <div class="seg-option">
+                <input type="radio" name="tip" id="tip-druzinski" value="druzinski">
+                <label class="seg-label" for="tip-druzinski">Družinski</label>
+              </div>
+              <div class="seg-option">
+                <input type="radio" name="tip" id="tip-vseeno" value="vseeno" checked>
+                <label class="seg-label" for="tip-vseeno">Vseeno</label>
+              </div>
+            </div>
+          </div>
+
+          <!-- GORIVO -->
+          <div class="form-group">
+            <span class="form-label">Gorivo</span>
+            <div class="segmented cols-3">
+              <div class="seg-option">
+                <input type="radio" name="gorivo" id="gorivo-bencin" value="bencin">
+                <label class="seg-label" for="gorivo-bencin">Bencin</label>
+              </div>
+              <div class="seg-option">
+                <input type="radio" name="gorivo" id="gorivo-diesel" value="diesel">
+                <label class="seg-label" for="gorivo-diesel">Diesel</label>
+              </div>
+              <div class="seg-option">
+                <input type="radio" name="gorivo" id="gorivo-vseeno" value="vseeno" checked>
+                <label class="seg-label" for="gorivo-vseeno">Vseeno</label>
+              </div>
+            </div>
+          </div>
+
+          <button type="submit" class="btn-search">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
+            </svg>
+            Poišči avto
+          </button>
+
+        </div>
+      </form>
+    </div>
+
+  </div>
+</section>
+
+<section class="results-section" id="results-section">
+  <div class="container">
+
+    <div class="results-header">
+      <h2 class="results-title">Rezultati iskanja</h2>
+      <span class="results-count" id="results-count"></span>
+    </div>
+
+    <!-- SORT BAR -->
+    <div class="sort-bar" id="sort-bar" style="display:none">
+      <span class="sort-label">Razvrsti po:</span>
+      <select class="sort-select" id="sort-select">
+        <option value="ujemanje">Ujemanju</option>
+        <option value="cena-asc">Ceni (najnižja najprej)</option>
+        <option value="cena-desc">Ceni (najvišja najprej)</option>
+        <option value="moc-desc">Moči (najmočnejši najprej)</option>
+        <option value="cas-asc">0–100 (najhitrejši najprej)</option>
+        <option value="letnik-desc">Letniku (najnovejši najprej)</option>
+      </select>
+    </div>
+
+    <div class="loading-overlay" id="loading-overlay">
+      <div class="spinner"></div>
+      <span>Iščem avtomobile...</span>
+    </div>
+
+    <div class="results-grid" id="results-grid"></div>
+
+    <div class="no-results" id="no-results" style="display:none">
+      <h3>Ni ustreznih avtomobilov</h3>
+      <p>Poskusi povečati budget ali spremeniti filtre.</p>
+    </div>
+
+  </div>
+</section>
+
+{% endblock %}

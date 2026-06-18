@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+
+{% block title %}Vsi avtomobili — Pravi Avto{% endblock %}
+
+{% block content %}
+
+<div class="all-cars-page">
+  <div class="container">
+
+    <h1 class="page-title">Vsi avtomobili</h1>
+    <p class="page-subtitle">{{ avtomobili|length }} avtomobilov v bazi</p>
+
+    <div class="cat-filters">
+      <button class="cat-btn active" data-kategorija="vsi" onclick="filtrirajKategorijo('vsi')">Vsi</button>
+      <button class="cat-btn" data-kategorija="sporten" onclick="filtrirajKategorijo('sporten')">Športni</button>
+      <button class="cat-btn" data-kategorija="navaden" onclick="filtrirajKategorijo('navaden')">Navadni</button>
+      <button class="cat-btn" data-kategorija="druzinski" onclick="filtrirajKategorijo('druzinski')">Družinski</button>
+    </div>
+
+    <div class="results-grid">
+      {% for avto in avtomobili %}
+      <div class="car-card" data-kategorija="{{ avto.kategorija }}">
+
+        <img
+          src="{{ url_for('static', filename='images/' + avto.slika) }}"
+          alt="{{ avto.polno_ime }}"
+          class="car-image"
+          onerror="this.outerHTML = '<div class=\'car-image-placeholder\'><svg viewBox=\'0 0 24 24\' fill=\'none\' stroke=\'currentColor\' stroke-width=\'1.5\'><path d=\'M5 17H3a2 2 0 0 1-2-2V9a2 2 0 0 1 2-2h3.5L9 4h6l2.5 3H21a2 2 0 0 1 2 2v6a2 2 0 0 1-2 2h-2\'/><circle cx=\'12\' cy=\'15\' r=\'3\'/></svg><span>{{ avto.slika }}</span></div>'"
+        >
+
+        <div class="car-body">
+          <div class="car-header">
+            <div>
+              <div class="car-brand">{{ avto.znamka }}</div>
+              <div class="car-name">{{ avto.model }}</div>
+            </div>
+            <div class="car-price">
+              <div class="price-amount">{{ "{:,.0f}".format(avto.cena).replace(",", ".") }} €</div>
+              <div class="price-label">okvirna cena</div>
+            </div>
+          </div>
+
+          <div class="car-meta">
+            <span class="meta-chip {% if avto.kategorija == 'sporten' %}chip-sport{% elif avto.kategorija == 'druzinski' %}chip-druzinski{% endif %}">
+              {% if avto.kategorija == 'sporten' %}Športen
+              {% elif avto.kategorija == 'navaden' %}Navaden
+              {% elif avto.kategorija == 'druzinski' %}Družinski
+              {% endif %}
+            </span>
+            <span class="meta-chip">
+              {% if avto.gorivo == 'bencin' %}Bencin{% else %}Diesel{% endif %}
+            </span>
+            <span class="meta-chip">{{ avto.moc }} KM</span>
+          </div>
+
+          <p class="car-desc">{{ avto.opis }}</p>
+
+          <a href="/avto/{{ avto.slug }}" class="btn-details">
+            Več informacij
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <path d="M5 12h14M12 5l7 7-7 7"/>
+            </svg>
+          </a>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+
+  </div>
+</div>
+
+{% endblock %}
